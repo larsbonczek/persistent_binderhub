@@ -48,7 +48,6 @@ binderhub:
                                            format(projects_limit))
       c.Launcher.pre_launch_hook = check_user_projects
     10-repo-providers:  |
-      # TODO enable zenodo, figshare and others
       from binderhub.repoproviders import GitHubRepoProvider, GistRepoProvider, \
                                           GitLabRepoProvider, GitRepoProvider, \
                                           ZenodoProvider, FigshareProvider, \

@@ -27,8 +27,7 @@ DEFAULT_PROVIDERS = (
     # hostname is the string "figshare" as in the format 10.6084/m9.figshare.9782777.v1
     # TODO: self hosted DOIs?
     {"prefix": "figshare", "name": "Figshare DOI", "hostname": "figshare"},
-    # Hydroshare doesn't work on mybinder.org
-    # {"prefix": "hydroshare", "name": "Hydroshare resource", "hostname": "hydroshare.org"},
+    {"prefix": "hydroshare", "name": "Hydroshare resource", "hostname": "hydroshare.org"},
     # hostname is the string "dvn" (lowercased) as in the format 10.7910/DVN/TJCLKP
     # TODO: self hosted DOIs?
     {"prefix": "dataverse", "name": "Dataverse DOI", "hostname": "dvn"},
@@ -93,13 +92,13 @@ class PersistentBinderSpawner(KubeSpawner):
         url_parts = urlparse(url)
         provider = url_parts.netloc.lower()
         # For Zenodo, figshare, dataverse only DOI is supported so netloc will be an empty string.
+        # if only a MD5 hash is provided, netloc will be an empty string and it's hydroshare resource ID.
         if len(provider) == 0:
             provider = url_parts.path.lower()
             # check if only hydroshare resource ID is present
             # It's a MD5 hash
-            # Hydroshare doesn't work on mybinder.org
-            # if len(re.findall(r"([a-fA-F\d]{32})", provider)) == 1:
-            #     provider = 'hydroshare'
+            if len(re.findall(r"([a-fA-F\d]{32})", provider)) == 1:
+                provider = 'hydroshare'
         self.log.info(url)
         self.log.info(url_parts)
         self.log.info(provider)
