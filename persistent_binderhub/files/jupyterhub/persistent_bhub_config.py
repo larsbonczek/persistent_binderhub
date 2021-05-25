@@ -211,7 +211,11 @@ class PersistentBinderSpawner(KubeSpawner):
         for i, v_m in enumerate(self.volume_mounts):
             if v_m['mountPath'] == projects_volume_mount['mountPath']:
                 del self.volume_mounts[i]
-        self.volume_mounts.append(projects_volume_mount)
+
+        # only mount /projects in the user server if mounting all projects is enabled
+        if z2jh.get_config('custom.mount_all_projects'):
+            self.volume_mounts.append(projects_volume_mount)
+
         # mountPath is /home/jovyan, this is set in z2jh helm chart values.yaml
         # mount_path = "~/"
         # mount_path = "$(HOME)"
