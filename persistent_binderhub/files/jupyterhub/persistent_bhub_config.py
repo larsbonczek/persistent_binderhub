@@ -195,13 +195,13 @@ class PersistentBinderSpawner(KubeSpawner):
         #  because start command is run as an ENTRYPOINT and initcontainer's command overwrites it
         #  But start command will be executed in notebook container (because we dont define a custom command for it),
         #  so change will take place there, and on user's side, there is no problem
-        self.init_containers = [{
+        self.init_containers.append({
             "name": "project-manager",
             "image": self.image,
             "command": command,
             # volumes is already defined for notebook container (self.volumes)
             "volume_mounts": [projects_volume_mount],
-        }]
+        })
 
         # notebook container (user server)
         # mount all projects (complete user disk) to /projects
