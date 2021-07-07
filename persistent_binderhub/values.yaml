@@ -47,21 +47,6 @@ binderhub:
                                            "One must be deleted before a new project can be created.".
                                            format(projects_limit))
       c.Launcher.pre_launch_hook = check_user_projects
-    10-repo-providers:  |
-      from binderhub.repoproviders import GitHubRepoProvider, GistRepoProvider, \
-                                          GitLabRepoProvider, GitRepoProvider, \
-                                          ZenodoProvider, FigshareProvider, \
-                                          HydroshareProvider, DataverseProvider
-      c.BinderHub.repo_providers = {
-          'gh': GitHubRepoProvider,
-          'gist': GistRepoProvider,
-          'gl': GitLabRepoProvider,
-          'git': GitRepoProvider,
-          'zenodo': ZenodoProvider,
-          'figshare': FigshareProvider,
-          'hydroshare': HydroshareProvider,
-          'dataverse': DataverseProvider,
-      }
 
   cors: &cors
     allowOrigin: '*'
