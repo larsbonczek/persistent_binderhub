@@ -57,9 +57,10 @@ binderhub:
     custom:
       cors: *cors
       binderauth_enabled: true
+      mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n528.1"
+        ref: "0.2.0-n563"
     cull:
       # don't cull authenticated users
       users: False

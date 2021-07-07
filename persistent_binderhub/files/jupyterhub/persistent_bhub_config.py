@@ -177,7 +177,7 @@ class PersistentBinderSpawner(KubeSpawner):
                 # raise Exception(msg)
                 self.log.info(msg)
                 self.repo_url = "https://github.com/gesiscss/persistent_binderhub"
-                self.image = "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f:0.2.0-n528.1"
+                self.image = "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f:0.2.0-n563"
                 self.ref = self.image.split(':')[-1]
         self.log.info(f"User ({self.user.name}) is launching '{self.repo_url}' project with '{self.image}'.")
 
@@ -215,13 +215,13 @@ class PersistentBinderSpawner(KubeSpawner):
         #  because start command is run as an ENTRYPOINT and initcontainer's command overwrites it
         #  But start command will be executed in notebook container (because we dont define a custom command for it),
         #  so change will take place there, and on user's side, there is no problem
-        self.init_containers = [{
+        self.init_containers.append({
             "name": "project-manager",
             "image": self.image,
             "command": command,
             # volumes is already defined for notebook container (self.volumes)
             "volume_mounts": [projects_volume_mount],
-        }]
+        })
 
         # notebook container (user server)
         # mount all projects (complete user disk) to /projects
@@ -231,7 +231,11 @@ class PersistentBinderSpawner(KubeSpawner):
         for i, v_m in enumerate(self.volume_mounts):
             if v_m['mountPath'] == projects_volume_mount['mountPath']:
                 del self.volume_mounts[i]
-        self.volume_mounts.append(projects_volume_mount)
+
+        # only mount /projects in the user server if mounting all projects is enabled
+        if z2jh.get_config('custom.mount_all_projects'):
+            self.volume_mounts.append(projects_volume_mount)
+
         # mountPath is /home/jovyan, this is set in z2jh helm chart values.yaml
         # mount_path = "~/"
         # mount_path = "$(HOME)"
