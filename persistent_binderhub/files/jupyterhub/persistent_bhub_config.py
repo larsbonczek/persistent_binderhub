@@ -99,9 +99,6 @@ class PersistentBinderSpawner(KubeSpawner):
             # It's a MD5 hash
             if len(re.findall(r"([a-fA-F\d]{32})", provider)) == 1:
                 provider = 'hydroshare'
-        self.log.info(url)
-        self.log.info(url_parts)
-        self.log.info(provider)
 
         for domain, args in self._repo_provider_by_domain:
             if domain in provider:
