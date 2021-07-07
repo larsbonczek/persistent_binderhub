@@ -15,7 +15,7 @@ binderhub:
       # change also binder_base_url and static_binder in jupyterhub.hub.extraConfig.20-template-variables
       base_url: /services/binder/
       use_registry: true
-      build_image: jupyter/repo2docker:2021.03.0-15.g73ab48a
+      build_image: jupyter/repo2docker:2021.03.0-53.geb75209
 
   extraEnv:
     - name: PROJECTS_LIMIT_PER_USER
@@ -47,16 +47,6 @@ binderhub:
                                            "One must be deleted before a new project can be created.".
                                            format(projects_limit))
       c.Launcher.pre_launch_hook = check_user_projects
-    10-repo-providers:  |
-      # TODO enable zenodo, figshare and others
-      from binderhub.repoproviders import GitHubRepoProvider, GistRepoProvider, \
-                                          GitLabRepoProvider, GitRepoProvider
-      c.BinderHub.repo_providers = {
-          'gh': GitHubRepoProvider,
-          'gist': GistRepoProvider,
-          'gl': GitLabRepoProvider,
-          'git': GitRepoProvider,
-      }
 
   cors: &cors
     allowOrigin: '*'

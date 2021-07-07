@@ -2,6 +2,7 @@
 Custom KubeSpawner and an API handler for projects to be used in persistent BinderHub deployment.
 These are imported in binderhub.jupyterhub.hub.extraConfig in values.yaml.
 """
+import re
 import json
 import string
 import random
@@ -20,6 +21,16 @@ DEFAULT_PROVIDERS = (
     {"prefix": "git", "name": "Git", "hostname": None},
     {"prefix": "gl", "name": "GitLab", "hostname": "gitlab.com"},
     {"prefix": "gist", "name": "Gist", "hostname": "gist.github.com"},
+    # hostname is the string "zenodo" as in the format 10.5281/zenodo.4274505
+    # TODO: arbitrary DOIs?
+    {"prefix": "zenodo", "name": "Zenodo DOI", "hostname": "zenodo"},
+    # hostname is the string "figshare" as in the format 10.6084/m9.figshare.9782777.v1
+    # TODO: self hosted DOIs?
+    {"prefix": "figshare", "name": "Figshare DOI", "hostname": "figshare"},
+    {"prefix": "hydroshare", "name": "Hydroshare resource", "hostname": "hydroshare.org"},
+    # hostname is the string "dvn" (lowercased) as in the format 10.7910/DVN/TJCLKP
+    # TODO: self hosted DOIs?
+    {"prefix": "dataverse", "name": "Dataverse DOI", "hostname": "dvn"},
 )
 
 DEFAULT_PROVIDER = {"provider_prefix": "git", "provider_name": "Git"}
@@ -80,6 +91,15 @@ class PersistentBinderSpawner(KubeSpawner):
             url = url[:-4]
         url_parts = urlparse(url)
         provider = url_parts.netloc.lower()
+        # For Zenodo, figshare, dataverse only DOI is supported so netloc will be an empty string.
+        # if only a MD5 hash is provided, netloc will be an empty string and it's hydroshare resource ID.
+        if len(provider) == 0:
+            provider = url_parts.path.lower()
+            # check if only hydroshare resource ID is present
+            # It's a MD5 hash
+            if len(re.findall(r"([a-fA-F\d]{32})", provider)) == 1:
+                provider = 'hydroshare'
+
         for domain, args in self._repo_provider_by_domain:
             if domain in provider:
                 return args
