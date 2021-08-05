@@ -60,7 +60,7 @@ binderhub:
       mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n563"
+        ref: "0.2.0-n645"
     cull:
       # don't cull authenticated users
       users: False
