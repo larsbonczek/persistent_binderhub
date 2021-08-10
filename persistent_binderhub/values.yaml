@@ -89,7 +89,7 @@ binderhub:
         - name: persistent-bhub-config
           # mount to where jupyterhub_config.py is,
           # we import the spawner class from persistent_bhub_config inside jupyterhub_config.py (hub.extraConfig)
-          mountPath: /etc/jupyterhub/persistent_bhub_config.py
+          mountPath: /usr/local/etc/jupyterhub/persistent_bhub_config.py
           subPath: persistent_bhub_config.py
 
       templatePaths:
@@ -126,12 +126,6 @@ binderhub:
           # https://github.com/jupyterhub/kubespawner/blob/8751773916ccc6b84c998f7950dd3e07fea5ae4e/kubespawner/objects.py#L231
           # c.KubeSpawner.extra_pod_config.update({'restart_policy': 'OnFailure'})
         00-binder: |
-          import pathlib
-          a= pathlib.Path(__file__).parent.resolve()
-          print(a)
-          p = a.glob('**/*')
-          files = [x for x in p if x.is_file()]
-          print(files)
           from persistent_bhub_config import PersistentBinderSpawner
           c.JupyterHub.spawner_class = PersistentBinderSpawner
 
