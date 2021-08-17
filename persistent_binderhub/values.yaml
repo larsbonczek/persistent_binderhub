@@ -60,7 +60,7 @@ binderhub:
       mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n645"
+        ref: "0.2.0-n652"
     cull:
       # don't cull authenticated users
       users: False
@@ -95,10 +95,8 @@ binderhub:
       templatePaths:
         - "/etc/jupyterhub/templates"
 
-      # Uncomment this once there is a binderhub release with z2jh 1.1.2
-      # templateVars:
-      #   persistency_explanation:
-      #     name: "Have a Binder-Ready repository? With Persistent BinderHub, turn this repository into a persistent Jupyter environment, allowing you to continue your analysis from anywhere at any time."
+      templateVars:
+        persistency_explanation: "Have a Binder-Ready repository? With Persistent BinderHub, turn this repository into a persistent Jupyter environment, allowing you to continue your analysis from anywhere at any time."
       #shutdownOnLogout: true
       #authenticatePrometheus: false
       redirectToServer: false
