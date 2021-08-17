@@ -60,7 +60,7 @@ binderhub:
       mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n563"
+        ref: "0.2.0-n652"
     cull:
       # don't cull authenticated users
       users: False
@@ -89,10 +89,12 @@ binderhub:
         - name: persistent-bhub-config
           # mount to where jupyterhub_config.py is,
           # we import the spawner class from persistent_bhub_config inside jupyterhub_config.py (hub.extraConfig)
-          mountPath: /etc/jupyterhub/persistent_bhub_config.py
+          mountPath: /usr/local/etc/jupyterhub/persistent_bhub_config.py
           subPath: persistent_bhub_config.py
+
       templatePaths:
         - "/etc/jupyterhub/templates"
+
       templateVars:
         persistency_explanation: "Have a Binder-Ready repository? With Persistent BinderHub, turn this repository into a persistent Jupyter environment, allowing you to continue your analysis from anywhere at any time."
       #shutdownOnLogout: true
