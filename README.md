@@ -106,7 +106,7 @@ RELEASENAME=pbhub
 NAMESPACE=pbhub-ns
 kubectl create namespace $NAMESPACE
 helm upgrade $RELEASENAME persistent_binderhub/persistent_binderhub \
-             --version=0.2.0-n652 \
+             --version=0.2.0-n671 \
              --install --namespace=$NAMESPACE \
              --debug \
              -f config.yaml
@@ -135,7 +135,7 @@ Finally upgrade the chart to apply this change:
 
 ```bash
 helm upgrade $RELEASENAME persistent_binderhub/persistent_binderhub \
-             --version=0.2.0-n652 \
+             --version=0.2.0-n671 \
              --install --namespace=$NAMESPACE \
              --debug \
              -f config.yaml
@@ -197,10 +197,10 @@ For example, if you want to use another version of repo2docker to build repos, a
 binderhub:
   config:
     BinderHub:
-      build_image: jupyter/repo2docker:2021.03.0-15.g73ab48a
+      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-8.gf1d01b6
 ```
 
-Note: `jupyter/repo2docker:2021.03.0-15.g73ab48a` is the repo2docker version used in this chart.
+Note: `repo2docker:2021.08.0-8.gf1d01b6` is the repo2docker version used in this chart.
 
 ### Default project
 
