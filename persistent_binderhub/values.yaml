@@ -15,7 +15,7 @@ binderhub:
       # change also binder_base_url and static_binder in jupyterhub.hub.extraConfig.20-template-variables
       base_url: /services/binder/
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-8.gf1d01b6
+      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-10.g5b5b759
 
   extraEnv:
     - name: PROJECTS_LIMIT_PER_USER
@@ -60,7 +60,7 @@ binderhub:
       mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n671"
+        ref: "0.2.0-n676"
     cull:
       # don't cull authenticated users
       users: False
