@@ -297,29 +297,13 @@ class PersistentBinderSpawner(KubeSpawner):
         if _state:
             # user already launched a project (started its server), spawner has a state
             projects = _state.get("projects", [])
-            _projects = []
-            for project in projects:
-                # to be backwards compatible for version <= 0.2.0-n153
-                # convert list, which contains project data, to dict
-                if isinstance(project, list):
-                    _projects.append(
-                        {
-                            "repo_url": project[0],
-                            "image": project[1],
-                            "ref": project[2],
-                            "display_name": project[3],
-                            "last_used": project[4],
-                        }
-                    )
-                else:
-                    _projects.append(project)
-            projects = _projects
             deleted_projects = _state.get("deleted_projects", [])
         else:
             # if user never launched project (state is empty), use default_project
             projects = [self.default_project]
             deleted_projects = []
             self.log.info(f"User ({self.user.name}) hasn't launched a project yet.")
+
         state = super().get_state()
         projects = [
             {**project, **self.url_to_provider_args(project["repo_url"])}
@@ -336,23 +320,14 @@ class PersistentBinderSpawner(KubeSpawner):
         ):
             # project is started or already running or is stopped,
             # so move project to the end and update the "last used" time
-            new_projects = []
-            for project in projects:
-                if project["repo_url"] != self.repo_url:
-                    new_projects.append(project)
             from datetime import datetime
 
-            new_projects.append(
-                {
-                    "repo_url": self.repo_url,
-                    "image": self.image,
-                    "ref": self.ref,
-                    "display_name": self.url_to_display_name(self.repo_url),
-                    "last_used": datetime.utcnow().isoformat() + "Z",
-                    **self.url_to_provider_args(self.repo_url),
-                }
-            )
-            state["projects"] = new_projects
+            for project in projects:
+                if project["repo_url"] == self.repo_url:
+                    project["last_used"] = datetime.utcnow().isoformat() + "Z"
+
+            projects = sorted(projects, key=lambda x: x["last_used"])
+            state["projects"] = projects
             self.log.info(
                 f"User ({self.user.name}) has just used the project {self.repo_url}."
             )
@@ -380,12 +355,6 @@ class PersistentBinderSpawner(KubeSpawner):
 class ProjectAPIHandler(APIHandler):
     """A JupyterHub API handler to manage user projects."""
 
-    def get_json_body(self):
-        body = super().get_json_body()
-        if body is None:
-            body = {}
-        return body
-
     @admin_only
     async def get(self, user_name):
         """Takes a user name and returns projects of that user."""
@@ -411,7 +380,7 @@ class ProjectAPIHandler(APIHandler):
                 "error"
             ] = "Project deletion is not allowed while the user server is active."
         else:
-            body = self.get_json_body()
+            body = {} if self.get_json_body() is None else self.get_json_body()
             if "repo_url" in body and "name" in body and "id" in body:
                 repo_url = body["repo_url"]
                 projects = user.spawner.get_state_field("projects")
