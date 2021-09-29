@@ -322,12 +322,21 @@ class PersistentBinderSpawner(KubeSpawner):
             # so move project to the end and update the "last used" time
             from datetime import datetime
 
+            current_project = {
+                     "repo_url": self.repo_url,
+                     "image": self.image,
+                     "ref": self.ref,
+                     "display_name": self.url_to_display_name(self.repo_url),
+                     "last_used": datetime.utcnow().isoformat() + "Z",
+                     **self.url_to_provider_args(self.repo_url),
+            }
+            new_projects = list()
             for project in projects:
-                if project["repo_url"] == self.repo_url:
-                    project["last_used"] = datetime.utcnow().isoformat() + "Z"
-
-            projects = sorted(projects, key=lambda x: x["last_used"])
-            state["projects"] = projects
+                if project["repo_url"] != self.repo_url:
+                    new_projects.append(project)
+            new_projects.append(current_project)
+            self.log.info(f"Project State: {new_projects}")
+            state["projects"] = new_projects
             self.log.info(
                 f"User ({self.user.name}) has just used the project {self.repo_url}."
             )
