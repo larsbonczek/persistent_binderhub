@@ -7,7 +7,7 @@ binderhub:
   config:
     BinderHub:
       debug: true
-      hub_url: http://127.0.0.1:31123
+      hub_url: http://192.168.99.181:31123
       # use only local docker images
       use_registry: false
 
@@ -28,8 +28,8 @@ binderhub:
     hub:
       services:
         binder:
-          url: http://127.0.0.1:31124
-          oauth_redirect_uri: "http://127.0.0.1:31123/services/binder/oauth_callback"
+          url: http://192.168.99.181:31124
+          oauth_redirect_uri: "http://192.168.99.181:31123/services/binder/oauth_callback"
           oauth_client_id: "binder-oauth-client-dev"
       resources:
         requests:
@@ -37,7 +37,7 @@ binderhub:
           memory: 0
       config:
         Authenticator:
-          admin_users: ['admin']
+          admin_users: ["admin"]
 
     proxy:
       https:

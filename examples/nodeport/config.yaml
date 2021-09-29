@@ -1,5 +1,4 @@
 binderhub:
-
   config:
     BinderHub:
       debug: true
