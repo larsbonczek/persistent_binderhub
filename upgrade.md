@@ -7,15 +7,17 @@ Here you can find the releases of BinderHub chart: https://jupyterhub.github.io/
 1. http://github.com/jupyterhub/binderhub/compare/87e78af...X
 2. If there is a z2jh(JupyterHub chart upgrade in binderhub chart requirements.yaml) upgrade: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/X...Y
    - If there is a JupyterHub upgrade:
-      - https://github.com/jupyterhub/jupyterhub/compare/X...Y
-      - Update base image tag with new version of JupyterHub in `.binder/Dockerfile`
-      - Then update image tag of "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f"
-        in `persistent_binderhub/files/jupyterhub/persistent_bhub_config.py`
+     - https://github.com/jupyterhub/jupyterhub/compare/X...Y
+     - Update base image tag with new version of JupyterHub in `.binder/Dockerfile`
+     - Then update image tag of "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f"
+       in `persistent_binderhub/files/jupyterhub/persistent_bhub_config.py`
 3. Update following files according to changes in comparison urls:
- - `persistent_binderhub/values.yaml`
- - `persistent_binderhub/files/jupyterhub/persistent_bhub_config.py`
- - `persistent_binderhub/files/jupyterhub/templates/home.html`
- - `README.md`s, `local` folder etc
+
+- `persistent_binderhub/values.yaml`
+- `persistent_binderhub/files/jupyterhub/persistent_bhub_config.py`
+- `persistent_binderhub/files/jupyterhub/templates/home.html`
+- `README.md`s, `local` folder etc
+
 4. Upgrade BinderHub chart version in `persistent_binderhub/requirements.yaml`
 5. Upgrade chart version in `persistent_binderhub/Chart.yaml`, you should only update the `-nxyz` part,
    it must be same as in version of BinderHub chart
@@ -33,6 +35,7 @@ When you made changes to this repo and want to create a new version,
 1. First update README.md (version of chart in "Installing the chart" section) and `binderhub.jupyterhub.custom.default_project.ref` in values.yaml and commit
 
 2.
+
 ```bash
 # be sure that you are in master branch
 
@@ -50,7 +53,7 @@ mv persistent_binderhub-<version>.tgz docs/
 #helm repo index --url https://gesiscss.github.io/persistent_binderhub/ docs/.
 # merge the new chart info into index.yaml
 helm repo index --url https://gesiscss.github.io/persistent_binderhub/ --merge docs/index.yaml docs/.
-# fix the `created` date of previous versions 
+# fix the `created` date of previous versions
 
 git add docs/index.yaml docs/persistent_binderhub-<version>.tgz
 git commit -m "persistent_binderhub-<version>.tgz"

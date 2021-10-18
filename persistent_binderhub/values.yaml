@@ -22,7 +22,7 @@ binderhub:
       value: "5"
 
   extraConfig:
-    20-launcher:  |
+    20-launcher: |
       import json
       import os
       from tornado import web
@@ -49,7 +49,7 @@ binderhub:
       c.Launcher.pre_launch_hook = check_user_projects
 
   cors: &cors
-    allowOrigin: '*'
+    allowOrigin: "*"
 
   jupyterhub:
     # Helm config for JupyterHub goes here
@@ -108,7 +108,7 @@ binderhub:
         JupyterHub:
           authenticator_class: dummy
       extraConfig:
-        20-template-variables:  |
+        20-template-variables: |
           import random
 
           c.JupyterHub.template_vars.update({
