@@ -1,6 +1,0 @@
-dependencies:
-- name: binderhub
-  repository: https://jupyterhub.github.io/helm-chart
-  version: 0.2.0-n555.heb692c5
-digest: sha256:6c45d31dd36f1c2adf179c93d0e4fe0739b765b304279b04510e1cbc6577c4f6
-generated: "2021-04-24T22:03:40.294866+02:00"
