@@ -15,7 +15,8 @@ binderhub:
       # change also binder_base_url and static_binder in jupyterhub.hub.extraConfig.20-template-variables
       base_url: /services/binder/
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-10.g5b5b759
+      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-136.g47ea95a
+      cors_allow_origin: "*"
 
   extraEnv:
     - name: PROJECTS_LIMIT_PER_USER
@@ -48,19 +49,15 @@ binderhub:
                                            format(projects_limit))
       c.Launcher.pre_launch_hook = check_user_projects
 
-  # cors: &cors
-    # allowOrigin: "*"
-
   jupyterhub:
     # Helm config for JupyterHub goes here
     # see https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/values.yaml
     custom:
-      # cors: *cors
       binderauth_enabled: true
       mount_all_projects: true
       default_project:
         repo_url: "https://github.com/gesiscss/persistent_binderhub"
-        ref: "0.2.0-n852"
+        ref: "0.2.0-n919"
     cull:
       # don't cull authenticated users
       users: False
@@ -68,8 +65,8 @@ binderhub:
       # NOTE: hub and proxy must have 1 pod
       # (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
       # replicas: 1
-      # pdb:
-        # minAvailable: 0
+      pdb:
+        minAvailable: 0
       extraVolumes:
         - name: persistent-bhub-templates
           configMap:
@@ -126,20 +123,15 @@ binderhub:
         00-binder: |
           from persistent_bhub_config import PersistentBinderSpawner
           c.JupyterHub.spawner_class = PersistentBinderSpawner
-
-    # proxy:
-      # chp:
-        # NOTE: hub and proxy must have 1 pod
-        # (https://github.com/jupyterhub/jupyterhub/issues/2841#issuecomment-561848594)
-        # replicas: 1
-        # pdb:
-          # minAvailable: 0
-
+    proxy:
+      chp:
+        pdb:
+          minAvailable: 0
     singleuser:
       # events_enabled - to get events from kubespawner
       events: true
       # to make notebook servers aware of hub
-      # cmd: jupyterhub-singleuser
+      cmd: jupyterhub-singleuser
       storage:
         type: dynamic
         capacity: 10Gi

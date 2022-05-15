@@ -193,7 +193,7 @@ class PersistentBinderSpawner(KubeSpawner):
                 # raise Exception(msg)
                 self.log.info(msg)
                 self.repo_url = "https://github.com/gesiscss/persistent_binderhub"
-                self.image = "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f:0.2.0-n852"
+                self.image = "gesiscss/binder-gesiscss-2dpersistent-5fbinderhub-ab107f:0.2.0-n919"
                 self.ref = self.image.split(":")[-1]
         self.log.info(
             f"User ({self.user.name}) is launching '{self.repo_url}' project with '{self.image}'."
