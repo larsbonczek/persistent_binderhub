@@ -1,4 +1,4 @@
-require(["jquery", "jhapi", "moment"], function($, JHAPI, moment) {
+require(["jquery", "jhapi", "moment", "bootstrap"], function($, JHAPI, moment) {
   "use strict";
 
   var base_url = window.jhdata.base_url;
